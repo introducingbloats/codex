@@ -25,6 +25,12 @@ writeShellApplication {
       VERSION=$(echo "$RELEASE" | jq -r '.tag_name' | sed 's/^rust-v//')
       echo "Latest codex-cli version: $VERSION"
 
+      CURRENT_VERSION=$(jq -r '.cli.version' "$VERSION_FILE")
+      if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+        echo "codex-cli is already up-to-date ($VERSION), skipping."
+        return 0
+      fi
+
       echo "Fetching x86_64-linux tarball hash"
       X64_URL="https://github.com/openai/codex/releases/download/rust-v$VERSION/codex-x86_64-unknown-linux-gnu.tar.gz"
       X64_HASH=$(nix store prefetch-file --json "$X64_URL" | jq -r '.hash')
@@ -45,6 +51,12 @@ writeShellApplication {
       RELEASE=$(curl -sL "https://api.github.com/repos/zed-industries/codex-acp/releases/latest")
       VERSION=$(echo "$RELEASE" | jq -r '.tag_name' | sed 's/^v//')
       echo "Latest codex-acp version: $VERSION"
+
+      CURRENT_VERSION=$(jq -r '.acp.version' "$VERSION_FILE")
+      if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+        echo "codex-acp is already up-to-date ($VERSION), skipping."
+        return 0
+      fi
 
       echo "Fetching x86_64-linux tarball hash"
       X64_URL="https://github.com/zed-industries/codex-acp/releases/download/v$VERSION/codex-acp-$VERSION-x86_64-unknown-linux-gnu.tar.gz"

@@ -5,8 +5,8 @@
     "hash-linux-arm64": "sha256-l2VIbarFr5eyaGS101AdMqpjBrX5+Bsr1hYLbKRstXk="
   },
   "acp": {
-    "version": "0.11.1",
-    "hash-linux-x64": "sha256-+NDKp5qxmFaJ8u0fJ4FNxRbTF/z/5FzzVXaF8ZSlP3M=",
-    "hash-linux-arm64": "sha256-3em+8cBOcs+3DSn8Ek7DStZ/4wuLFz86Gsu+Wz6esKw="
+    "version": "0.12.0",
+    "hash-linux-x64": "sha256-harvfBvKZNtYnzgTmAuWhsnGdNW0ZhJoTuo0Q6bPb44=",
+    "hash-linux-arm64": "sha256-4F5hPaZXsrpnMl4moiMT7ZsoKKreK50YGFvoOtFD6c8="
   }
 }

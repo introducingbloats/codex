@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   installShellFiles,
-  patchelf,
   glibc,
   libcap,
   zlib,
@@ -46,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    patchelf
   ];
 
   sourceRoot = ".";
@@ -71,12 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
        echo "Error: codex binary not found"
        exit 1
     fi
-
-    # Patch the binary
-    patchelf \
-      --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" \
-      --set-rpath "${runtimeLibraryPath}" \
-      $out/lib/codex-bin
 
     # Wrap the binary in a shell script
     {

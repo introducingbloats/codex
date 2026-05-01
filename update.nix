@@ -32,11 +32,11 @@ writeShellApplication {
       fi
 
       echo "Fetching x86_64-linux tarball hash"
-      X64_URL="https://github.com/openai/codex/releases/download/rust-v$VERSION/codex-x86_64-unknown-linux-gnu.tar.gz"
+      X64_URL="https://github.com/openai/codex/releases/download/rust-v$VERSION/codex-x86_64-unknown-linux-musl.tar.gz"
       X64_HASH=$(nix store prefetch-file --json "$X64_URL" | jq -r '.hash')
       
       echo "Fetching aarch64-linux tarball hash"
-      ARM64_URL="https://github.com/openai/codex/releases/download/rust-v$VERSION/codex-aarch64-unknown-linux-gnu.tar.gz"
+      ARM64_URL="https://github.com/openai/codex/releases/download/rust-v$VERSION/codex-aarch64-unknown-linux-musl.tar.gz"
       ARM64_HASH=$(nix store prefetch-file --json "$ARM64_URL" | jq -r '.hash')
 
       jq --arg version "$VERSION" \

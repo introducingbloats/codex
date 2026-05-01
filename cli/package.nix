@@ -13,7 +13,7 @@ let
   currentVersion = (lib.importJSON ../version.json).cli;
   downloadUrl =
     platform:
-    "https://github.com/openai/codex/releases/download/rust-v${currentVersion.version}/codex-${platform}-unknown-linux-gnu.tar.gz";
+    "https://github.com/openai/codex/releases/download/rust-v${currentVersion.version}/codex-${platform}-unknown-linux-musl.tar.gz";
   defaultArgs =
     {
       "x86_64-linux" = {
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Install files from the tarball
     cp -r * $out/lib/
     
-    # The actual binary in the tarball has a platform suffix like codex-x86_64-unknown-linux-gnu
+    # The actual binary in the tarball has a platform suffix like codex-x86_64-unknown-linux-musl
     BINARY=$(find . -maxdepth 2 -type f -name "codex*" | head -n 1)
     if [ -n "$BINARY" ]; then
       mv $out/lib/$(basename "$BINARY") $out/lib/codex-bin

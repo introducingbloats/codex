@@ -1,8 +1,8 @@
 {
   "cli": {
-    "version": "0.132.0",
-    "hash-linux-x64": "sha256-i2RDLuTvWx19GXqtRTWidryFIj9OQWN2nA4QFc2og7I=",
-    "hash-linux-arm64": "sha256-roCo/7Qav8pOupdGzTupBAPVewK9vNaEVfVgiQrZ9EA="
+    "version": "0.133.0",
+    "hash-linux-x64": "sha256-0GAZq5w10oG3jcLrsq5VwruX6hG/f0Urr+OQ7dsANO8=",
+    "hash-linux-arm64": "sha256-Jov+jPgVSUD+olbfdc1EHFSgxx5sjM1Fqz92/yi6FBM="
   },
   "acp": {
     "version": "0.14.0",

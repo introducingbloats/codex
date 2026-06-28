@@ -14,15 +14,46 @@ writeShellApplication {
     curl
     nix
   ];
-  text = ''
+    text = ''
     set -euo pipefail
+
+    CURL_OPTS=()
+    if [[ -n "''${GITHUB_TOKEN:-}" ]]; then
+      CURL_OPTS=( -H "Authorization: Bearer ''${GITHUB_TOKEN}" )
+    fi
 
     VERSION_FILE="version.json"
 
+    github_curl() {
+      local url=$1
+      local tmp
+      local status
+
+      tmp="$(mktemp)"
+      status="$(curl -sS -L "''${CURL_OPTS[@]}" -o "$tmp" -w "%{http_code}" "$url" || echo "__CURL_FAILED__")"
+
+      if [ "$status" = "__CURL_FAILED__" ]; then
+        echo "Error: failed to execute curl request: $url" >&2
+        rm -f "$tmp"
+        exit 1
+      fi
+
+      if [ "$status" != "200" ]; then
+        echo "Error: GitHub API returned HTTP $status for $url" >&2
+        echo "Response body:" >&2
+        cat "$tmp" >&2 || true
+        rm -f "$tmp"
+        exit 1
+      fi
+
+      cat "$tmp"
+      rm -f "$tmp"
+    }
+
     update_cli() {
       echo "Fetching latest release from openai/codex"
-      RELEASE=$(curl -sL "https://api.github.com/repos/openai/codex/releases/latest")
-      VERSION=$(echo "$RELEASE" | jq -r '.tag_name' | sed 's/^rust-v//')
+      RELEASE=$(github_curl "https://api.github.com/repos/openai/codex/releases/latest")
+      VERSION=$(echo "$RELEASE" | jq -re '.tag_name' | sed 's/^rust-v//')
       echo "Latest codex-cli version: $VERSION"
 
       CURRENT_VERSION=$(jq -r '.cli.version' "$VERSION_FILE")
@@ -48,8 +79,8 @@ writeShellApplication {
 
     update_acp() {
       echo "Fetching latest release from zed-industries/codex-acp"
-      RELEASE=$(curl -sL "https://api.github.com/repos/zed-industries/codex-acp/releases/latest")
-      VERSION=$(echo "$RELEASE" | jq -r '.tag_name' | sed 's/^v//')
+      RELEASE=$(github_curl "https://api.github.com/repos/zed-industries/codex-acp/releases/latest")
+      VERSION=$(echo "$RELEASE" | jq -re '.tag_name' | sed 's/^v//')
       echo "Latest codex-acp version: $VERSION"
 
       CURRENT_VERSION=$(jq -r '.acp.version' "$VERSION_FILE")
